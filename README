@@ -1,0 +1,65 @@
+= Variables
+
+The Variables Extension adds the ability to declare and retrieve variables from
+within Radiant pages (and snippets and layouts).
+
+It enhances <r:snippet> and <r:content> tags to let them declare variables
+(similar to parameterized snippets).
+
+It also adds a <r:puts> tag to render your variable values.
+
+And finally, it adds an evaluator for use by the Conditional Tags extension so 
+you can do things like:
+
+  -- in your body part --
+    <r:content part="extended" class="someClass" />
+    
+  -- in your extended part --
+    <p<r:if cond="vars[class] exists?"> class="<r:puts value_for="class" />">Some Text</p>
+
+
+
+== The 'set_vars' Tag
+
+The new 'set_vars' tag is used to set variable values as in:
+
+    <r:set_vars a="my string" b="false" />
+
+The values are cast as either a number, boolean, nil, or string. Variables set
+this way are global in scope and can be accessed from anywhere.
+
+
+== The 'snippet' and 'content' Tags
+
+The 'snippet' and 'content' tags have been modified to allow variables to be
+declared as well, like:
+
+    <r:snippet name="a snippet" myVar="some value" />
+    <r:content part="a part" a="10" b="nil" c="false" />
+
+As with 'set_vars', the variables are cast into a type.  UNLIKE 'set_vars' these
+variables are local (contextual) in scope and are only available within the
+snippet or page part (or sub-contexts).
+
+Note: Local variables declarations do not overwrite global ones but they do
+supercede them.
+
+
+== The 'puts' Tag
+
+The new 'puts' tag renders the current value of a variable (local or global):
+
+    <r:puts value_for="myVar" />
+
+Additionally, you can use the value_for="*all*" option to render a list of all
+current variable values.
+
+
+== The Vars Evaluator
+
+There is also a 'vars' evaluator implemented to work with the Conditional Tags
+extension like.
+
+    <r:if cond=" vars[class] exists? " > You have no class ;-) </r:if>
+
+At this time Conditional Tags is required (though you could disable it).
