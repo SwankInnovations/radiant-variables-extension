@@ -38,9 +38,8 @@ end
 
 require 'evaluator_spec_utils.rb'
 
-
 def evaluate_var(var_name)
-  "<r:evaluate element='vars[#{var_name}]'/>"
+  "<r:evaluate value_for='vars[#{var_name}]'/>"
 end
 
 

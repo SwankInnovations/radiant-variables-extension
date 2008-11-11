@@ -78,35 +78,5 @@ module Variables
       end
     end
 
-
-    desc %{
-      Renders the value of a variable. The @value_for@ attribute specifies
-      which variable (or, you can use <code>value_for="*all*"</code> to
-      render a list of all current variables).
-
-      *Usage:*
-      <pre><code><r:puts value_for="varName|*all*" /></code></pre>
-    }
-    tag 'puts' do |tag|
-      if var_name = tag.attr['value_for']
-        current_vars = (tag.globals.vars ||= {}).merge(Variables.contextual_vars(tag))
-        if var_name == '*all*'
-          output = "Current Variables:"
-          if current_vars.empty?
-            output << " none"
-          else
-            current_vars.sort.each do |name, value|
-              output << "\n  #{name} = #{value.inspect}"
-            end
-            output << "\n"
-          end
-        else
-          current_vars[var_name].to_s
-        end
-      else
-        raise TagError.new("`puts' tag must contain a 'value_for' attribute")
-      end
-    end
-
   end
 end

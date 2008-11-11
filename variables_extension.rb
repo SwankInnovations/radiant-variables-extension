@@ -1,5 +1,5 @@
 class VariablesExtension < Radiant::Extension
-  version "0.1"
+  version "0.2"
   description "Adds the ability to set and evaluate variable (including adding variables to snippets)"
   url ""
 
