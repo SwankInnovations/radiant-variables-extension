@@ -25,22 +25,6 @@ describe "Variables::PageTags" do
 
 
 
-  describe "<r:puts> tag" do
-
-    it 'should raise appropriate error if a "value_for" attribute is not given' do
-      @page.should render('<r:puts bogus="attribute" />').with_error(
-        "`puts' tag must contain a 'value_for' attribute"
-      )
-    end
-
-
-    it 'should return an empty string if the variable named is not set' do
-      @page.should render('<r:puts value_for="a" />').as("")
-    end
-
-  end
-
-
   [ { :input_text => "true", :result => true },
     { :input_text => " true ", :result => true },
     { :input_text => "True", :result => true },
@@ -83,7 +67,7 @@ describe "Variables::PageTags" do
 
     describe "<r:set_vars> tag" do
 
-      it "should read the attribute name/value pair into a variable name/value pair" do
+      it "should set the attribute name/value pair into a variable name/value pair" do
         tag = build_tag('set_vars', :myVar => curr_value[:input_text])
         @page.should render(tag + evaluate_var('myVar')).
             and_evaluate_as(curr_value[:result])
@@ -110,22 +94,9 @@ describe "Variables::PageTags" do
 
 
 
-    describe "<r:puts> tag" do
-
-      it 'should display the value of the named variable as a string' do
-        tag = build_tag('set_vars', :myVar => curr_value[:input_text])
-        @page.should render(tag + '<r:puts value_for="myVar" />').
-          as(curr_value[:result].to_s)
-      end
-
-    end
-
-
-
-
     describe "<r:snippets> tag" do
 
-      it 'should read any attribute (other than "name") into a variable' do
+      it 'should set any attribute (other than "name") into a variable' do
         create_snippet 'a snippet', :content => evaluate_var('myVar')
         tag = build_tag('snippet', :name => 'a snippet', :myVar => curr_value[:input_text])
         @page.should render(tag).and_evaluate_as(curr_value[:result])
@@ -138,7 +109,7 @@ describe "Variables::PageTags" do
 
     describe '<r:content> tag' do
 
-      it 'should read any attribute (other than "name") into a variable' do
+      it 'should set any attribute (other than "name") into a variable' do
         create_page_part 'other part', :page_id => @page.id, :content => evaluate_var('myVar')
         tag = build_tag('content', :part => 'other part', :myVar => curr_value[:input_text])
         @page.should render(tag).and_evaluate_as(curr_value[:result])
@@ -194,27 +165,4 @@ describe "Variables::PageTags" do
 
   end
 
-
-
-
-  describe '<r:puts value_for="*all*">' do
-
-    it 'should render all of the current variables sorted by name' do
-      create_snippet 'snippet 1', :content => '<r:snippet name="snippet 2" d="high" b="score" />'
-      create_snippet 'snippet 2', :content => '<r:content part="other part" d="years" a="ago" />'
-      create_page_part 'other part', :page_id => @page.id, :content => '<r:content part="another part" c="7" a="4" />'
-      create_page_part 'another part', :page_id => @page.id, :content => '<r:puts value_for="*all*" />'
-      @page.should render('<r:set_vars empty="nil" final="98.6" />' +
-          '<r:snippet name="snippet 1" b="true" c="a string" d="nil" a="10" />').
-          as("Current Variables:\n" +
-             "  a = 4.0\n" +
-             "  b = \"score\"\n" +
-             "  c = 7.0\n" +
-             "  d = \"years\"\n" +
-             "  empty = nil\n" +
-             "  final = 98.6\n"
-          )
-    end
-
-  end
 end
