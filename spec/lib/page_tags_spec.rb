@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "Variables::PageTags" do
 
-  scenario :home_page, :snippets
+  dataset :home_page, :snippets
 
   before :each do
     @page = pages(:home)

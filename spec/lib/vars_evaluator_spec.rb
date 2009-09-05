@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 module Variables
   describe Evaluator do
 
-    scenario :home_page, :snippets
+    dataset :home_page, :snippets
 
     before :each do
       create_page "Parent Page" do
